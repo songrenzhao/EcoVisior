@@ -1,6 +1,5 @@
 from flask import Flask, jsonify, request
-# from rnn import PredictionModel
-from rnntest import PredictionModel
+from rnn import PredictionModel
 
 app = Flask(__name__)
 
@@ -9,7 +8,7 @@ def hello_world():
     return '''<h1>Ecovisor Analysis </h1> 
     <ul>
 	    <li>
-	    	<p>This Recurrent Neural Network predicts the closing price of a stock - for T+1</p>
+	    	<p>This Recurrent Neural Network predicts the closing price of a stock - for <b>T+1</b></p>
 	    </li>
 	    <li>
 	    	<p>To run RNN do the following <b>url/prediction/ticker</b> - Make sure the ticker is in the yahoo finance api</p>
@@ -31,8 +30,8 @@ def get_prediction(ticker):
 		'predicted': float(tommorrow), 
 		})
 
-if __name__ == '__main__':
-	app.run(debug=True)
+# if __name__ == '__main__':
+# 	app.run(debug=True)
 	# To be able to request this api do
 	# import requests
 	# x = requests.get('url')
