@@ -108,7 +108,7 @@ class PredictionModel:
         return today_price , trainPredict_tomorrow
 
     def calculate_difference(self,today,tommorrow):
-        total = (float(today) - float(tommorrow)) / 100
+        total = abs(float(today) - float(tommorrow)) / 100
         return total
 
 if __name__ == '__main__':

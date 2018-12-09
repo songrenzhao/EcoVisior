@@ -23,11 +23,13 @@ def get_test(ticker):
 def get_prediction(ticker):
 	model = PredictionModel(ticker.lower())
 	today, tommorrow = model.main()
+	difference = model.calculate_difference(today,tommorrow)
 	return jsonify(
 		{
 		'ticker': ticker,
 		'today': float(today), 
-		'predicted': float(tommorrow), 
+		'tommorrow_predicted': float(tommorrow),
+		'percentage_difference': difference, 
 		})
 
 # if __name__ == '__main__':
