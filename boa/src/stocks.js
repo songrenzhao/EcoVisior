@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 import LineExample from './Line/LineExample'
+
 class Stocks extends Component{
     constructor(){
         super();
         this.state = {
+            input: "",
             name: [],
             object: [],
             timeArr: [],
@@ -12,7 +14,8 @@ class Stocks extends Component{
             lowArr: [],  
             closeArr: [],
             volumeArr: [],
-            url: null
+            url: null,
+            type: "High",
             // "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=AMD&interval=5min&outputsize=full&apikey=KJEQ4OXGXSCLWKKV",
         }
     }
@@ -25,6 +28,7 @@ class Stocks extends Component{
             },function(){
                 this.updateArray();
             }))
+            .catch(error => console.log(error));
     }
     updateArray=()=>{
         const timeArr = [];
@@ -51,38 +55,71 @@ class Stocks extends Component{
             closeArr: closeArr,
             volumeArr: volumeArr,
         },function () {
-            // console.log(this.state.object);
+            this.displayNeunetwork(this.state.input);
         });
+    }
+
+    displayNeunetwork = (input) => {
+        fetch("https://cors-anywhere.herokuapp.com/afternoon-reef-20637.herokuapp.com/prediction/" + input, {headers: {'Access-Control-Allow-Origin': '*'}})
+            .then(response => response.json())
+            .then(data => this.setState({
+                percentDiff: data["percentage_difference"],
+                today: data["today"],
+                tmrPredict: data["tommorrow_predicted"]
+            }, function() {
+                console.log("Percentage of difference is", this.state.percentDiff);
+                console.log("Today's price is", this.state.today);
+                console.log("Tommorow's price will be", this.state.tmrPredict);
+            }))
+            .catch(error => console.log(error));
     }
 
     display = () => {
         let input = document.getElementById("nameInput").value;
         console.log(input);
         let newUrl = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" + input + "&interval=5min&outputsize=full&apikey=KJEQ4OXGXSCLWKKV";
-        this.setState({url: newUrl}, function () {
-            console.log(this.state.url);
+        this.setState({url: newUrl, input: input}, function () {
             this.updateObeject();
-            console.log(this.state.object);
         });
-        console.log(this.state.object);
-        console.log(this.state.timeArr);
     }
 
-
+    showHigh = () => {
+        this.setState({type: "High"})
+    }
+    showLow = () => {
+        this.setState({type: "Low"})
+    }
+    showVol = () => {
+        this.setState({type: "Vol"})
+    }
 
     render(){
+        let Person;
+        if(this.state.type == "High"){
+            Person = <LineExample
+                    name = {this.state.name}
+                    time = {this.state.timeArr}
+                    input = {this.state.highArr}/>;
+        }else if(this.state.type == "Low"){
+            Person = <LineExample
+                    name = {this.state.name}
+                    time = {this.state.timeArr}
+                    input = {this.state.lowArr}/>;
+        }else{
+            Person = <LineExample
+                    name = {this.state.name}
+                    time = {this.state.timeArr}
+                    input = {this.state.volumeArr}/>;
+        }
+        
         return(
             <div>
-                <p>Hello</p>
                 <button onClick = {this.display}>Submit</button>
+                <button onClick = {this.showHigh}>Show High Price</button>
+                <button onClick = {this.showLow}>Show Low Price</button>
+                <button onClick = {this.showVol}>Show volume sold</button>
                 <input type = "text" id = "nameInput" placeholder = "Enter your stock symbol" ></input>
-                <LineExample
-                 name = {this.state.name}
-                 time = {this.state.timeArr}
-                 high = {this.state.highArr}
-                 low = {this.state.lowArr}
-                 close = {this.state.closeArr}
-                 volume = {this.state.volumeArr}/>
+                {Person}
             </div>
         );
     }
