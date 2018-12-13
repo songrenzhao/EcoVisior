@@ -18,6 +18,7 @@ class Stocks extends Component{
             type: "High",
             // "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=AMD&interval=5min&outputsize=full&apikey=KJEQ4OXGXSCLWKKV",
         }
+        this.getNews = this.getNews.bind(this)
     }
     updateObeject=()=>{
         fetch(this.state.url)
@@ -54,24 +55,31 @@ class Stocks extends Component{
             lowArr: lowArr,
             closeArr: closeArr,
             volumeArr: volumeArr,
-        },function () {
-            this.displayNeunetwork(this.state.input);
         });
     }
 
+    
+
     displayNeunetwork = (input) => {
-        fetch("https://cors-anywhere.herokuapp.com/afternoon-reef-20637.herokuapp.com/prediction/" + input, {headers: {'Access-Control-Allow-Origin': '*'}})
-            .then(response => response.json())
-            .then(data => this.setState({
-                percentDiff: data["percentage_difference"],
-                today: data["today"],
-                tmrPredict: data["tommorrow_predicted"]
-            }, function() {
-                console.log("Percentage of difference is", this.state.percentDiff);
-                console.log("Today's price is", this.state.today);
-                console.log("Tommorow's price will be", this.state.tmrPredict);
-            }))
-            .catch(error => console.log(error));
+        console.log("fetch data")
+        console.log("ticker: ", this.state.input)
+        var url = "http://ecovisor.herokuapp.com/prediction/" + this.state.input
+        fetch(url, {
+          crossDomain:true,
+          method: 'GET',
+          headers: {'Content-Type':'application/json'},
+        })
+          .then(response => response.json())
+          .then(responseJson => {
+            console.log(responseJson)
+            const id = responseJson["id"]
+            console.log(id)
+
+            var resultsURL = "http://ecovisor.herokuapp.com/results/" + id
+            this.performPredictionFetch(resultsURL)
+            
+        })
+
     }
 
     display = () => {
@@ -93,14 +101,83 @@ class Stocks extends Component{
         this.setState({type: "Vol"})
     }
 
+    onButton() {
+        console.log("This works")
+        console.log("stock state:", )
+
+    }
+
+    performPredictionFetch(url) {
+        // 20 second timeout seems to be enough time to finish training
+        // and display the predicted values
+        setTimeout(() => {
+            console.log('5 seconds have passed')
+
+            fetch(url, {
+                crossDomain: true,
+                method: 'GET',
+                headers: {'Content-Type':'application/json'},
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(url)
+                    console.log(data)
+                    if (data["Message"] === "The job is still running - try again in a few seconds") {
+                        console.log("Perform request again with the same id")
+                        this.performPredictionFetch(url)
+
+                    } else {
+                        console.log(data["percentage_difference"])
+                        console.log(data["today"])
+                        console.log(data["tommorrow"])
+                    }
+                    
+                })
+                .catch((error) => {
+                    console.log("There was an error", error)
+
+                })
+
+        }, 5000)
+
+    }
+
+    getNews() {
+        console.log("Get news")
+        console.log("Current ticker: ", this.state.input)
+
+        var queryParam =  "amd stocks"
+
+        // max page size is 100 for fetch
+
+        var url = 'https://newsapi.org/v2/everything?' +
+              'q=' + queryParam +
+              '&from=2018-12-11&' +
+              'sortBy=popularity&' + 
+              'pageSize=100&' +
+              'apiKey=f9878693aa7d4de394cc43948d1e19d9';
+        var req = new Request(url);
+
+        fetch(req).then(
+        function(response) {
+          if (response.status !== 200) {
+            console.log('Problem in fetching');
+            return;
+          }
+          response.json().then(function(data) {
+            console.log(data);
+          });
+        })    
+    }
+
     render(){
         let Person;
-        if(this.state.type == "High"){
+        if(this.state.type === "High"){
             Person = <LineExample
                     name = {this.state.name}
                     time = {this.state.timeArr}
                     input = {this.state.highArr}/>;
-        }else if(this.state.type == "Low"){
+        }else if(this.state.type === "Low"){
             Person = <LineExample
                     name = {this.state.name}
                     time = {this.state.timeArr}
@@ -113,13 +190,42 @@ class Stocks extends Component{
         }
         
         return(
-            <div>
-                <button onClick = {this.display}>Submit</button>
-                <button onClick = {this.showHigh}>Show High Price</button>
-                <button onClick = {this.showLow}>Show Low Price</button>
-                <button onClick = {this.showVol}>Show volume sold</button>
-                <input type = "text" id = "nameInput" placeholder = "Enter your stock symbol" ></input>
-                {Person}
+            <div class="jumbotron">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <button class="btn btn-info btn-lg btn-block" onClick = {this.display}>Submit</button>
+                                <button class="btn btn-info btn-lg btn-block" onClick = {this.showHigh}>Show High Price</button>
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn btn-info btn-lg btn-block" onClick = {this.showLow}>Show Low Price</button>
+                                <button class="btn btn-info btn-lg btn-block" onClick = {this.showVol}>Show volume sold</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-group mb-3 mt-3 pl-3 pr-3">
+                                <input class="form-control" type = "text" id = "nameInput" placeholder = "Enter your stock symbol" ></input>
+                            </div>
+                        </div>
+                        <div class="container">
+                            {Person}
+                        </div>
+
+                        <div class="row border-top">
+                            <div class="col-md- mt-3">
+                                <button class="btn btn-warning btn-lg btn-block" onClick = {this.displayNeunetwork}>Display Prediction</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-6 border-left">
+                        <h1> NEWS VIEW GOES HERE</h1>
+                        <div class="col-md-6 mt-3">
+                                <button class="btn btn-warning btn-lg btn-block" onClick={this.getNews}>Get News</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }
