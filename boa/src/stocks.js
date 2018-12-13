@@ -24,6 +24,10 @@ class Stocks extends Component{
             predicted: [],
             date: [],
             timeSeries1: [],
+            click: false,
+            articles: [],
+            title: [],
+            url: [],
         }
         this.getNews = this.getNews.bind(this)
     }
@@ -160,13 +164,10 @@ class Stocks extends Component{
         console.log("stock state:", )
     }
 
-    
-
     getNews() {
         console.log("Get news")
         console.log("Current ticker: ", this.state.input)
-
-        var queryParam =  document.getElementById("nameInput").value
+        var queryParam =  document.getElementById("nameInput").value + " Share"
         // max page size is 100 for fetch
         var url = 'https://newsapi.org/v2/everything?' +
               'q=' + queryParam +
@@ -176,16 +177,34 @@ class Stocks extends Component{
               'apiKey=f9878693aa7d4de394cc43948d1e19d9';
         var req = new Request(url);
 
-        fetch(req).then(
-        function(response) {
-          if (response.status !== 200) {
-            console.log('Problem in fetching');
-            return;
-          }
-          response.json().then(function(data) {
-            console.log(data);
-          });
-        })    
+        fetch(req)
+            .then(response => response.json())
+            .then(data => this.setState({
+                articles: data["articles"]
+            },function(){
+                console.log(this.state.articles);
+                this.updateNew();
+            }))
+            .catch(error => console.log(error));     
+        this.setState({
+            click: !this.state.click,
+        })       
+    }
+
+    updateNew = () => {
+        let urlArr = [];
+        let titleArr = [];
+        Object.keys(this.state.articles).forEach(key => {
+            urlArr.push(this.state.articles[key]["url"]);
+            titleArr.push(this.state.articles[key]["title"]);
+        })
+        this.setState({
+            url: urlArr,
+            title: titleArr,
+        }, function(){
+            console.log(this.state.url);
+            console.log(this.state.title);
+        });
     }
 
     render(){
@@ -206,51 +225,61 @@ class Stocks extends Component{
                     time = {this.state.timeArr}
                     input = {this.state.volumeArr}/>;
         }
-        
-        return(
-            <div class="jumbotron">
-                <div class="row">
-                    <div class="col-6">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <button class="btn btn-info btn-lg btn-block" onClick = {this.display}>Submit</button>
-                                <button class="btn btn-info btn-lg btn-block" onClick = {this.showHigh}>Show High Price</button>
-                            </div>
-                            <div class="col-md-6">
-                                <button class="btn btn-info btn-lg btn-block" onClick = {this.showLow}>Show Low Price</button>
-                                <button class="btn btn-info btn-lg btn-block" onClick = {this.showVol}>Show volume sold</button>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="input-group mb-3 mt-3 pl-3 pr-3">
-                                <input class="form-control" type = "text" id = "nameInput" placeholder = "Enter your stock symbol" ></input>
-                            </div>
-                        </div>
-                        <div class="container">
-                            {Person}
-                        </div>
+        let table = [];
+        if(this.state.click){
+            for(let i = 0; i < 10; i++){
+                table.push(
+                    <li><a href={this.state.url[i]}>{this.state.title[i]}</a></li>
+                );
+            }
+        }else{
+            table = [];
+        }
 
-                        <div class="row border-top">
-                            <div class="col-md- mt-3">
-                                <button class="btn btn-warning btn-lg btn-block" onClick = {this.displayNeunetwork}>Display Prediction</button>
-                                <p>{this.state.percentage_difference}</p>
-                                <p>{this.state.today}</p>
-                                <p>{this.state.tommorrow}</p>
-                            </div>
-                            {/* <MultaData date = {this.state.date} origin = {this.state.original}/> */}
-                            <MultaData date = {this.state.date} origin = {this.state.original} predict = {this.state.predicted}/>
+        return(
+            <div>
+                <div className = ".col-sm-5 .col-md-6">
+                    <div className="row">
+                        <div className="col-md-6">
+                            <button className="btn btn-info btn-lg btn-block" onClick = {this.display}>Submit</button>
+                            <button className="btn btn-info btn-lg btn-block" onClick = {this.showHigh}>Show High Price</button>
+                        </div>
+                        <div className="col-md-6">
+                            <button className="btn btn-info btn-lg btn-block" onClick = {this.showLow}>Show Low Price</button>
+                            <button className="btn btn-info btn-lg btn-block" onClick = {this.showVol}>Show volume sold</button>
                         </div>
                     </div>
 
-                    <div class="col-6 border-left">
-                        <h1> NEWS VIEW GOES HERE</h1>
-                        <div class="col-md-6 mt-3">
-                                <button class="btn btn-warning btn-lg btn-block" onClick={this.getNews}>Get News</button>
+                    <div className="row">
+                        <div className="input-group mb-3 mt-3 pl-3 pr-3">
+                            <input className="form-control" type = "text" id = "nameInput" placeholder = "Enter your stock symbol" ></input>
                         </div>
+                    </div>
+
+                    <div className="container">
+                        {Person}
+                    </div>
+                </div>
+
+                <div className=".col-sm-5 .col-md-6">
+                    <div className="col-md- mt-3">
+                        <button className="btn btn-warning btn-lg btn-block" onClick = {this.displayNeunetwork}>Display Prediction</button>
+                        <p>{this.state.percentage_difference}</p>
+                        <p>{this.state.today}</p>
+                        <p>{this.state.tommorrow}</p>
+                        <MultaData date = {this.state.date} origin = {this.state.original} predict = {this.state.predicted}/>
+                    </div>
+                </div>
+
+                <div className="col-6 border-left">
+                    <h1> NEWS VIEW GOES HERE</h1>
+                    <div className="col-md-6 mt-3">
+                        <button className="btn btn-warning btn-lg btn-block" onClick={this.getNews}>Get News</button>
+                        {table}
                     </div>
                 </div>
             </div>
-        );
+        )
     }
 }
 
