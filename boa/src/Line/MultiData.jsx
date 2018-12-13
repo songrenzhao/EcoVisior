@@ -7,7 +7,7 @@ const MultiData = (props) => {
     labels: props.date,
     datasets: [
       {
-        label: props.name,
+        label: "original",
         fill: false,
         lineTension: 0.5,
         backgroundColor: 'rgba(75,192,192,0.4)',
