@@ -4,14 +4,14 @@ import {Line} from 'react-chartjs-2';
 const MultiData = (props) => {
 
   const data = {
-    labels: props.date,
+    labels: props.date.reverse(),
     datasets: [
       {
         label: "original",
         fill: false,
         lineTension: 0.5,
-        backgroundColor: 'rgba(75,192,192,0.4)',
-        borderColor: 'rgba(75,192,192,1)',
+        backgroundColor: 'rgba(225,0,0,0.4)',
+        borderColor: "red",
         borderCapStyle: 'butt',
         borderDash: [],
         borderDashOffset: 0.0,

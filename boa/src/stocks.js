@@ -167,7 +167,7 @@ class Stocks extends Component{
     getNews() {
         console.log("Get news")
         console.log("Current ticker: ", this.state.input)
-        var queryParam =  document.getElementById("nameInput").value + " Share"
+        var queryParam =  document.getElementById("nameInput").value;
         // max page size is 100 for fetch
         var url = 'https://newsapi.org/v2/everything?' +
               'q=' + queryParam +
@@ -198,6 +198,7 @@ class Stocks extends Component{
             urlArr.push(this.state.articles[key]["url"]);
             titleArr.push(this.state.articles[key]["title"]);
         })
+        urlArr.reverse(); titleArr.reverse();
         this.setState({
             url: urlArr,
             title: titleArr,
@@ -264,10 +265,10 @@ class Stocks extends Component{
                 <div className=".col-sm-5 .col-md-6">
                     <div className="col-md- mt-3">
                         <button className="btn btn-warning btn-lg btn-block" onClick = {this.displayNeunetwork}>Display Prediction</button>
-                        <p>{this.state.percentage_difference}</p>
-                        <p>{this.state.today}</p>
-                        <p>{this.state.tommorrow}</p>
                         <MultaData date = {this.state.date} origin = {this.state.original} predict = {this.state.predicted}/>
+                        <p>The percentage difference is <span>{this.state.percentage_difference}</span></p>
+                        <p>Today price is <span>{this.state.today}</span></p>
+                        <p>Tommorow Price will be <span>{this.state.tommorrow}</span></p>
                     </div>
                 </div>
 
