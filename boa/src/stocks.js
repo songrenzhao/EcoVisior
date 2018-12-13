@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import LineExample from './Line/LineExample'
+import LineExample from './Line/LineExample';
+import MultaData from './Line/MultiData';
 
 class Stocks extends Component{
     constructor(){
@@ -16,7 +17,13 @@ class Stocks extends Component{
             volumeArr: [],
             url: null,
             type: "High",
-            // "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=AMD&interval=5min&outputsize=full&apikey=KJEQ4OXGXSCLWKKV",
+            percentage_difference: "",
+            today: "",
+            tommorrow: "",
+            original: [],
+            predicted: [],
+            date: [],
+            timeSeries1: [],
         }
         this.getNews = this.getNews.bind(this)
     }
@@ -57,13 +64,10 @@ class Stocks extends Component{
             volumeArr: volumeArr,
         });
     }
-
-    
-
-    displayNeunetwork = (input) => {
+    displayNeunetwork = () => {
         console.log("fetch data")
         console.log("ticker: ", this.state.input)
-        var url = "http://ecovisor.herokuapp.com/prediction/" + this.state.input
+        var url = "http://ecovisorv2.herokuapp.com/prediction/" + this.state.input
         fetch(url, {
           crossDomain:true,
           method: 'GET',
@@ -74,12 +78,62 @@ class Stocks extends Component{
             console.log(responseJson)
             const id = responseJson["id"]
             console.log(id)
-
-            var resultsURL = "http://ecovisor.herokuapp.com/results/" + id
+            var resultsURL = "http://ecovisorv2.herokuapp.com/results/" + id
             this.performPredictionFetch(resultsURL)
-            
         })
-
+    }
+    performPredictionFetch(url) {
+        // 20 second timeout seems to be enough time to finish training
+        // and display the predicted values
+        setTimeout(() => {
+            // console.log('5 seconds have passed')
+            fetch(url, {
+                crossDomain: true,
+                method: 'GET',
+                headers: {'Content-Type':'application/json'},
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // console.log(url)
+                    // console.log(data)
+                    if (data["Message"] === "The job is still running - try again in a few seconds") {
+                        console.log("Perform request again with the same id")
+                        this.performPredictionFetch(url)
+                    } else {
+                        this.setState({
+                            timeSeries1: data["Time Series"],
+                            percentage_difference: data["percentage_difference"],
+                            today: data["today"],
+                            tommorrow: data["tommorrow"],
+                        },function(){
+                            this.updateMLArray();
+                        })
+                    }
+                })
+                .catch((error) => { console.log("There was an error", error)})
+            }, 10000)
+    }
+    updateMLArray = () => {
+        const dateArr = [];
+        const originArr = [];
+        const predictArr = [];
+        console.log(this.state.timeSeries1);
+        Object.keys(this.state.timeSeries1).forEach(key => {
+            dateArr.push(key);
+            originArr.push(this.state.timeSeries1[key]["original"]);
+            predictArr.push(this.state.timeSeries1[key]["predicted"]);
+        });
+        dateArr.reverse(); originArr.reverse(); predictArr.reverse();
+        // console.log(timeArr);
+        this.setState({
+            date: dateArr,
+            original: originArr,
+            predicted: predictArr,
+        }, function(){
+            console.log(this.state.date);
+            console.log(this.state.original);
+            console.log(this.state.predicted);
+        });
     }
 
     display = () => {
@@ -104,52 +158,16 @@ class Stocks extends Component{
     onButton() {
         console.log("This works")
         console.log("stock state:", )
-
     }
 
-    performPredictionFetch(url) {
-        // 20 second timeout seems to be enough time to finish training
-        // and display the predicted values
-        setTimeout(() => {
-            console.log('5 seconds have passed')
-
-            fetch(url, {
-                crossDomain: true,
-                method: 'GET',
-                headers: {'Content-Type':'application/json'},
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(url)
-                    console.log(data)
-                    if (data["Message"] === "The job is still running - try again in a few seconds") {
-                        console.log("Perform request again with the same id")
-                        this.performPredictionFetch(url)
-
-                    } else {
-                        console.log(data["percentage_difference"])
-                        console.log(data["today"])
-                        console.log(data["tommorrow"])
-                    }
-                    
-                })
-                .catch((error) => {
-                    console.log("There was an error", error)
-
-                })
-
-        }, 5000)
-
-    }
+    
 
     getNews() {
         console.log("Get news")
         console.log("Current ticker: ", this.state.input)
 
-        var queryParam =  "amd stocks"
-
+        var queryParam =  document.getElementById("nameInput").value
         // max page size is 100 for fetch
-
         var url = 'https://newsapi.org/v2/everything?' +
               'q=' + queryParam +
               '&from=2018-12-11&' +
@@ -215,7 +233,12 @@ class Stocks extends Component{
                         <div class="row border-top">
                             <div class="col-md- mt-3">
                                 <button class="btn btn-warning btn-lg btn-block" onClick = {this.displayNeunetwork}>Display Prediction</button>
+                                <p>{this.state.percentage_difference}</p>
+                                <p>{this.state.today}</p>
+                                <p>{this.state.tommorrow}</p>
                             </div>
+                            {/* <MultaData date = {this.state.date} origin = {this.state.original}/> */}
+                            <MultaData date = {this.state.date} origin = {this.state.original} predict = {this.state.predicted}/>
                         </div>
                     </div>
 
