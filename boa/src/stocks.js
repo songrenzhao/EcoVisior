@@ -238,45 +238,54 @@ class Stocks extends Component{
         }
 
         return(
-            <div>
-                <div className = ".col-sm-5 .col-md-6">
-                    <div className="row">
-                        <div className="col-md-6">
-                            <button className="btn btn-info btn-lg btn-block" onClick = {this.display}>Submit</button>
-                            <button className="btn btn-info btn-lg btn-block" onClick = {this.showHigh}>Show High Price</button>
+            <div class="container">
+                <div class="row">
+                        <div class="col-md-6 pt-4">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <button class="btn btn-info btn-lg btn-block" onClick = {this.display}>Submit</button>
+                                    <button class="btn btn-info btn-lg btn-block" onClick = {this.showHigh}>Show High Price</button>
+                                </div>
+                                <div class="col-md-6">
+                                    <button class="btn btn-info btn-lg btn-block" onClick = {this.showLow}>Show Low Price</button>
+                                    <button class="btn btn-info btn-lg btn-block" onClick = {this.showVol}>Show Volume Sold</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-group mb-3 mt-3 pl-3 pr-3">
+                                    <input class="form-control" type = "text" id = "nameInput" placeholder = "Enter your stock symbol" ></input>
+                                </div>
+                            </div>
+                            <div class="container">
+                                {Person}
+                            </div>
                         </div>
-                        <div className="col-md-6">
-                            <button className="btn btn-info btn-lg btn-block" onClick = {this.showLow}>Show Low Price</button>
-                            <button className="btn btn-info btn-lg btn-block" onClick = {this.showVol}>Show volume sold</button>
-                        </div>
-                    </div>
 
-                    <div className="row">
-                        <div className="input-group mb-3 mt-3 pl-3 pr-3">
-                            <input className="form-control" type = "text" id = "nameInput" placeholder = "Enter your stock symbol" ></input>
+                        <div class="col-md-6 pt-4 border-left">
+                            <button class="btn btn-success btn-lg btn-block" onClick = {this.displayNeunetwork}>Display Prediction</button>
+                            <MultaData date = {this.state.date} origin = {this.state.original} predict = {this.state.predicted}/>
+                            <div class="row">
+                                <div class="col mb-3">
+                                    <button type="button" class="btn btn btn-outline-info btn-block disabled">Percentage Difference: <span class="badge badge-pill badge-warning">{this.state.percentage_difference}</span></button>
+                                    <button type="button" class="btn btn btn-outline-info btn-block disabled">Current Price: <span class="badge badge-pill badge-warning">{this.state.today}</span></button>
+                                    <button type="button" class="btn btn btn-outline-info btn-block disabled">Predicted Price: <span class="badge badge-pill badge-warning">{this.state.tommorrow}</span></button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-
-                    <div className="container">
-                        {Person}
-                    </div>
                 </div>
 
-                <div className=".col-sm-5 .col-md-6">
-                    <div className="col-md- mt-3">
-                        <button className="btn btn-warning btn-lg btn-block" onClick = {this.displayNeunetwork}>Display Prediction</button>
-                        <MultaData date = {this.state.date} origin = {this.state.original} predict = {this.state.predicted}/>
-                        <p>The percentage difference is <span>{this.state.percentage_difference}</span></p>
-                        <p>Today price is <span>{this.state.today}</span></p>
-                        <p>Tommorow Price will be <span>{this.state.tommorrow}</span></p>
-                    </div>
-                </div>
+                <div class="row">
+                    <div class="col-12 pt-4 border-top">
+                        <div class="col-md-12 mt-3">
+                            <button class="btn btn-warning btn-lg btn-block" onClick={this.getNews}>Get News</button>
+                            
+                            <ul class="list-group pt-4 pb-4">
+                                <li class="list-group-item list-unstyled">
+                                    <p>{table}</p>
+                                </li>
+                            </ul>
 
-                <div className="col-6 border-left">
-                    <h1> NEWS VIEW GOES HERE</h1>
-                    <div className="col-md-6 mt-3">
-                        <button className="btn btn-warning btn-lg btn-block" onClick={this.getNews}>Get News</button>
-                        {table}
+                        </div>
                     </div>
                 </div>
             </div>
