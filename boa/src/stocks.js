@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import LineExample from './Line/LineExample';
 import MultaData from './Line/MultiData';
+import HisTred from './HistoricalTrend/histTrend.jsx'
 
 class Stocks extends Component{
     constructor(){
@@ -27,7 +28,6 @@ class Stocks extends Component{
             click: false,
             articles: [],
             title: [],
-            url: [],
         }
         this.getNews = this.getNews.bind(this)
     }
@@ -275,7 +275,11 @@ class Stocks extends Component{
                 </div>
 
                 <div class="row">
-                    <div class="col-12 pt-4 border-top">
+                    <div className = "col-md-6 pt-4">
+                        <p>2007 - 2008 Trend</p>
+                        <HisTred></HisTred>
+                    </div>
+                    <div class="col-md-6 pt-4">
                         <div class="col-md-12 mt-3">
                             <button class="btn btn-warning btn-lg btn-block" onClick={this.getNews}>Get News</button>
                             
