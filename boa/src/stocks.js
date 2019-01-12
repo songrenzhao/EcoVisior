@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import LineExample from './Line/LineExample';
 import MultaData from './Line/MultiData';
-import HisTred from './HistoricalTrend/histTrend.jsx'
+import HisTred from './HistoricalTrend/histTrend.jsx';
+import YieldCurve from './YieldCurve/YieldCurve.jsx';
 
 class Stocks extends Component{
     constructor(){
@@ -281,16 +282,31 @@ class Stocks extends Component{
                     </div>
                     <div class="col-md-6 pt-4">
                         <div class="col-md-12 mt-3">
-                            <button class="btn btn-warning btn-lg btn-block" onClick={this.getNews}>Get News</button>
+                            {/* <button class="btn btn-warning btn-lg btn-block" onClick={this.getNews}>Get News</button>
                             
                             <ul class="list-group pt-4 pb-4">
                                 <li class="list-group-item list-unstyled">
                                     <p>{table}</p>
                                 </li>
-                            </ul>
+                            </ul> */}
+
+                            <p>Simulated Historical Data will be here...</p>
 
                         </div>
                     </div>
+                </div>
+                <div> 
+                    <p>Yield Curve</p>
+                    <YieldCurve></YieldCurve>
+                </div>
+                <div>
+                    <button class="btn btn-warning btn-lg btn-block" onClick={this.getNews}>Get News</button>
+                            
+                    <ul class="list-group pt-4 pb-4">
+                        <li class="list-group-item list-unstyled">
+                            <p>{table}</p>
+                        </li>
+                    </ul>
                 </div>
             </div>
         )
