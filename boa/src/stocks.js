@@ -277,7 +277,7 @@ class Stocks extends Component{
 
                 <div class="row">
                     <div className = "col-md-6 pt-4">
-                        <p>2007 - 2008 Trend</p>
+                        <p>Historical Trend</p>
                         <HisTred></HisTred>
                     </div>
                     <div class="col-md-6 pt-4">
