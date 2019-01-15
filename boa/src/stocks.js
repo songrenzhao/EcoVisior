@@ -179,12 +179,12 @@ class Stocks extends Component{
         // max page size is 100 for fetch
         var url = 'https://newsapi.org/v2/everything?' +
               'q=' + queryParam +
-              '&from=2018-12-11&' +
+              '&from=2018-12-26&' +
               'sortBy=popularity&' + 
               'pageSize=100&' +
               'apiKey=f9878693aa7d4de394cc43948d1e19d9';
         var req = new Request(url);
-
+        console.log(url);
         fetch(req)
             .then(response => response.json())
             .then(data => this.setState({
