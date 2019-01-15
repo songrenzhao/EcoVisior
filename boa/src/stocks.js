@@ -3,6 +3,7 @@ import LineExample from './Line/LineExample';
 import MultaData from './Line/MultiData';
 import HisTred from './HistoricalTrend/histTrend.jsx';
 import YieldCurve from './YieldCurve/YieldCurve.jsx';
+import NToOne from './NToOne/NToOne.jsx'
 
 class Stocks extends Component{
     constructor(){
@@ -29,6 +30,8 @@ class Stocks extends Component{
             click: false,
             articles: [],
             title: [],
+            OneToOne: -1,
+            nToOne: -1,
         }
         this.getNews = this.getNews.bind(this)
     }
@@ -70,6 +73,10 @@ class Stocks extends Component{
         });
     }
     displayNeunetwork = () => {
+        this.setState({
+            OneToOne: 1,
+            nToOne: -1,
+        })
         console.log("fetch data")
         console.log("ticker: ", this.state.input)
         var url = "http://ecovisorv2.herokuapp.com/prediction/" + this.state.input
@@ -209,6 +216,13 @@ class Stocks extends Component{
         });
     }
 
+    displayNToOne = () => {
+        this.setState({
+            nToOne: 1,
+            OneToOne: -1,
+        });
+    }
+
     render(){
         let Person;
         if(this.state.type === "High"){
@@ -263,8 +277,10 @@ class Stocks extends Component{
                         </div>
 
                         <div class="col-md-6 pt-4 border-left">
-                            <button class="btn btn-success btn-lg btn-block" onClick = {this.displayNeunetwork}>Display Prediction</button>
-                            <MultaData date = {this.state.date} origin = {this.state.original} predict = {this.state.predicted}/>
+                            <button class="btn btn-success btn-lg btn-block" onClick = {this.displayNeunetwork}>Display One to One Prediction</button>
+                            <button onClick = {this.displayNToOne}>Display N to One Prediction</button>
+                            {(this.state.OneToOne == 1) && <MultaData date = {this.state.date} origin = {this.state.original} predict = {this.state.predicted}/>}
+                            {(this.state.nToOne == 1) && <NToOne input = {this.state.input}/>}
                             <div class="row">
                                 <div class="col mb-3">
                                     <button type="button" class="btn btn btn-outline-info btn-block disabled">Percentage Difference: <span class="badge badge-pill badge-warning">{this.state.percentage_difference}</span></button>

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import YieldLine from '../Line/YieldLine';
+import YieldCurveRate from '../Line/YieldCurveRate.jsx'
 
 class YieldCurve extends Component{
     constructor(){
@@ -16,7 +17,7 @@ class YieldCurve extends Component{
     };
 
     launch = () => {
-        let newUrl = "https://www.quandl.com/api/v3/datasets/USTREASURY/REALYIELD.json?api_key=bro-uGJemJuznZ5Qs7XZ";
+        let newUrl = "https://www.quandl.com/api/v3/datasets/USTREASURY/YIELD.json?api_key=bro-uGJemJuznZ5Qs7XZ";
         fetch(newUrl)
             .then(response => response.json())
             .then(data => this.setState({
@@ -29,33 +30,25 @@ class YieldCurve extends Component{
 
     updateArray = () => {
         let timeArr = [];
-        let fiveArr = [];
-        let sevenArr = [];
+        let oneArr = [];
         let tenArr = [];
-        let twentyArr = [];
-        let thirtyArr = [];
+        let diffArr = [];
         Object.keys(this.state.object).forEach(key => {
-            timeArr.push(this.state.object[key][0]);
-            fiveArr.push(this.state.object[key][1]);
-            sevenArr.push(this.state.object[key][2]);
-            tenArr.push(this.state.object[key][3]);
-            twentyArr.push(this.state.object[key][4]);
-            thirtyArr.push(this.state.object[key][5]);
+            if(this.state.object[key][5] != null){
+                timeArr.push(this.state.object[key][0]);
+                tenArr.push(this.state.object[key][10]);
+                oneArr.push(this.state.object[key][5]);
+                diffArr.push(((this.state.object[key][10]) - (this.state.object[key][5]))/this.state.object[key][5]);
+            }
         })
-        timeArr.reverse(); fiveArr.reverse(); sevenArr.reverse();
-        tenArr.reverse(); twentyArr.reverse(); thirtyArr.reverse();
-
+        timeArr.reverse(); oneArr.reverse(); tenArr.reverse(); diffArr.reverse();
+        console.log(this.state.object);
         this.setState({
             timeArr: timeArr,
-            fiveArr: fiveArr,
-            sevenArr: sevenArr,
+            oneArr: oneArr,
             tenArr: tenArr,
-            twentyArr: twentyArr,
-            thirtyArr: thirtyArr,
+            diffArr: diffArr,
         });
-
-        console.log(timeArr);
-        console.log(fiveArr);
     }
 
     // displayFive = () => {
@@ -97,11 +90,13 @@ class YieldCurve extends Component{
                 <button onClick = {this.displayTwenty}>20 year</button>
                 <button onClick = {this.displayThirty}>30 year</button> */}
                 <YieldLine timeArr = {this.state.timeArr}
-                           fiveArr = {this.state.fiveArr}
-                           sevenArr = {this.state.sevenArr}
+                           oneArr = {this.state.oneArr}
                            tenArr = {this.state.tenArr}
-                           twentyArr = {this.state.twentyArr}
-                           thirtyArr = {this.state.thirtyArr}/>
+                    />
+                <YieldCurveRate timeArr = {this.state.timeArr}
+                                diffArr = {this.state.diffArr}
+                    />
+                
             </div>
         )
     }

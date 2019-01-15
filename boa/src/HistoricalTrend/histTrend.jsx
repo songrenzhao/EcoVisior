@@ -8,8 +8,81 @@ class histTrend extends React.Component{
             name: 'S&P 500',
             highArr78: [],
         };
-
         this.display();
+        this.displayTrain();
+    }
+
+    displayTrain = () => {
+        console.log("fetch data")
+        console.log("ticker: ", this.state.input)
+        var url = "http://ecovisorv2.herokuapp.com/songmodel/IVV"
+        fetch(url, {
+          crossDomain:true,
+          method: 'GET',
+          headers: {'Content-Type':'application/json'},
+        })
+          .then(response => response.json())
+          .then(responseJson => {
+            console.log(responseJson)
+            const id = responseJson["id"]
+            console.log(id)
+            var resultsURL = "http://ecovisorv2.herokuapp.com/results/" + id
+            this.performPredictionFetch(resultsURL)
+        })
+    }
+
+    performPredictionFetch(url) {
+        // 20 second timeout seems to be enough time to finish training
+        // and display the predicted values
+        setTimeout(() => {
+            // console.log('5 seconds have passed')
+            fetch(url, {
+                crossDomain: true,
+                method: 'GET',
+                headers: {'Content-Type':'application/json'},
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // console.log(url)
+                    // console.log(data)
+                    if (data["Message"] === "The job is still running - try again in a few seconds") {
+                        console.log("Perform request again with the same id")
+                        this.performPredictionFetch(url)
+                    } else {
+                        this.setState({
+                            timeSeries1: data["Time Series"],
+                            percentage_difference: data["percentage_difference"],
+                            today: data["today"],
+                            tommorrow: data["tommorrow"],
+                        },function(){
+                            this.updateMLArray();
+                        })
+                    }
+                })
+                .catch((error) => { console.log("There was an error", error)})
+            }, 10000)
+    }
+    updateMLArray = () => {
+        const dateArr = [];
+        const originArr = [];
+        const predictArr = [];
+        console.log(this.state.timeSeries1);
+        Object.keys(this.state.timeSeries1).forEach(key => {
+            dateArr.push(key);
+            originArr.push(this.state.timeSeries1[key]["original"]);
+            predictArr.push(this.state.timeSeries1[key]["predicted"]);
+        });
+        dateArr.reverse(); originArr.reverse(); predictArr.reverse();
+        // console.log(timeArr);
+        this.setState({
+            date: dateArr,
+            original: originArr,
+            predicted: predictArr,
+        }, function(){
+            console.log(this.state.date);
+            console.log(this.state.original);
+            console.log(this.state.predicted);
+        });
     }
 
     display = () => {
@@ -151,15 +224,6 @@ class histTrend extends React.Component{
                       highArr78 = {this.state.highArr78}
                       timeArr78 = {this.state.timeArr78}
                       highArr89 = {this.state.highArr89}
-                      highArr0910 = {this.state.highArr0910}
-                      highArr1011 = {this.state.highArr1011}
-                      highArr1112 = {this.state.highArr1112}
-                      highArr1213 = {this.state.highArr1213}
-                      highArr1314 = {this.state.highArr1314}
-                      highArr1415 = {this.state.highArr1415}
-                      highArr1516 = {this.state.highArr1516}
-                      highArr1617 = {this.state.highArr1617}
-                      highArr1718 = {this.state.highArr1718}
                       />
             </div>
         )
