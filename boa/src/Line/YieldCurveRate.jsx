@@ -6,7 +6,7 @@ const YieldCurveRate = (props) => {
     labels: props.timeArr,
     datasets: [
       {
-        label: "10-1 year yield curve rates",
+        label: "Spread between 10 year and 1 year US treasuries",
         fill: false,
         lineTension: 0.5,
         backgroundColor: 'rgba(75,192,192,0.4)',
