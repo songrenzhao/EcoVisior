@@ -277,8 +277,8 @@ class Stocks extends Component{
                         </div>
 
                         <div class="col-md-6 pt-4 border-left">
-                            <button class="btn btn-success btn-lg btn-block" onClick = {this.displayNeunetwork}>Display One to One Prediction</button>
-                            <button onClick = {this.displayNToOne}>Display N to One Prediction</button>
+                            <button class="btn btn-success btn-lg btn-block" onClick = {this.displayNeunetwork}>Model #1 Display One to One Prediction</button>
+                            <button class="btn btn-success btn-lg btn-block mb-4" onClick = {this.displayNToOne}>Model #2 Display N to One Prediction</button>
                             {(this.state.OneToOne == 1) && <MultaData date = {this.state.date} origin = {this.state.original} predict = {this.state.predicted}/>}
                             {(this.state.nToOne == 1) && <NToOne input = {this.state.input}/>}
                             <div class="row">
@@ -292,27 +292,24 @@ class Stocks extends Component{
                 </div>
 
                 <div class="row">
-                    <div className = "col-md-6 pt-4">
-                        <p>Historical Trend</p>
+                    <div class = "col-md-6 pt-4 border-top">
+                        <p class="h1">S&P 500 Historical Trend 2007-2009</p>
                         <HisTred></HisTred>
                     </div>
-                    <div class="col-md-6 pt-4">
+                    <div class="col-md-6 pt-4 border-left border-top">
                         <div class="col-md-12 mt-3">
                             {/* <button class="btn btn-warning btn-lg btn-block" onClick={this.getNews}>Get News</button>
-                            
                             <ul class="list-group pt-4 pb-4">
                                 <li class="list-group-item list-unstyled">
                                     <p>{table}</p>
                                 </li>
                             </ul> */}
-
-                            <p>Simulated Historical Data will be here...</p>
-
+                            <p class="h1">Simulated Historical Data will be here...</p>
                         </div>
                     </div>
                 </div>
-                <div> 
-                    <p>Yield Curve</p>
+                <div class="border-top"> 
+                    <p class="h1 pt-3">U.S treasuries 10 year Vs 1 year - Yield Curve</p>
                     <YieldCurve></YieldCurve>
                 </div>
                 <div>
