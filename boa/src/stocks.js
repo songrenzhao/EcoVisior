@@ -275,7 +275,7 @@ class Stocks extends Component{
                         <div class="col-md-6 pt-4 border-left">
                             <button class="btn btn-success btn-lg btn-block" onClick = {this.displayNeunetwork}>Model #1 Display One to One Prediction</button>
                             <button class="btn btn-success btn-lg btn-block mb-4" onClick = {this.displayNToOne}>Model #2 Display N to One Prediction</button>
-                            {/* <MultaData date = {this.state.date} origin = {this.state.original} predict = {this.state.predicted}/> */}
+                            <MultaData date = {this.state.date} origin = {this.state.original} predict = {this.state.predicted}/>
                             {this.state.nToOne == 1 && <NToOne date = {this.state.date} input = {this.state.input}/>}
                             <div class="row">
                                 <div class="col mb-3">
