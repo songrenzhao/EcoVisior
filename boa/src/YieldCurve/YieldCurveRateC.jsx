@@ -41,7 +41,7 @@ class YieldCurveRateC extends Component{
             }
         })
         timeArr.reverse(); oneArr.reverse(); tenArr.reverse(); diffArr.reverse();
-        console.log(this.state.object);
+        //console.log(this.state.object);
         this.setState({
             timeArr: timeArr,
             oneArr: oneArr,
