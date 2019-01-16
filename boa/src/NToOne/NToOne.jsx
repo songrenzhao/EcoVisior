@@ -29,7 +29,7 @@ class NToOne extends React.Component{
     displayNeunetwork = () => {
         console.log("fetch data")
         console.log("ticker: ", this.state.input)
-        var url = "http://ecovisorv2.herokuapp.com/nmodel/" + this.state.input
+        var url = "http://ecovisorv2.herokuapp.com/nmodel/" + this.state.input;
         fetch(url, {
           crossDomain:true,
           method: 'GET',

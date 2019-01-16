@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import YieldLine from '../Line/YieldLine';
+import YieldCurveRate from '../Line/YieldCurveRate.jsx'
 
-class YieldCurve extends Component{
+class YieldCurveRateC extends Component{
     constructor(){
         super();
         this.state = {
@@ -41,7 +41,7 @@ class YieldCurve extends Component{
             }
         })
         timeArr.reverse(); oneArr.reverse(); tenArr.reverse(); diffArr.reverse();
-        //console.log(this.state.object);
+        console.log(this.state.object);
         this.setState({
             timeArr: timeArr,
             oneArr: oneArr,
@@ -83,18 +83,13 @@ class YieldCurve extends Component{
     render(){
         return(
             <div>
-                {/* <button onClick = {this.displayFive}>5 year</button>
-                <button onClick = {this.displaySeven}>7 year</button>
-                <button onClick = {this.displayTen}>10 year</button>
-                <button onClick = {this.displayTwenty}>20 year</button>
-                <button onClick = {this.displayThirty}>30 year</button> */}
-                <YieldLine timeArr = {this.state.timeArr}
-                           oneArr = {this.state.oneArr}
-                           tenArr = {this.state.tenArr}
+                <YieldCurveRate timeArr = {this.state.timeArr}
+                                diffArr = {this.state.diffArr}
                     />
+                
             </div>
         )
     }
 }
 
-export default YieldCurve;
+export default YieldCurveRateC;
