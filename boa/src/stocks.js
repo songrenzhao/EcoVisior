@@ -5,6 +5,7 @@ import HisTred from './HistoricalTrend/histTrend.jsx';
 import YieldCurve from './YieldCurve/YieldCurve.jsx';
 import NToOne from './NToOne/NToOne.jsx'
 import YieldCurveRateC from './YieldCurve/YieldCurveRateC';
+import SimulatedTrend from './HistoricalTrend/SimulatedTrend';
 
 class Stocks extends Component{
     constructor(){
@@ -301,6 +302,7 @@ class Stocks extends Component{
                                 </li>
                             </ul> */}
                             <p class="h1">Simulated Historical Data will be here...</p>
+                            <SimulatedTrend />
                         </div>
                     </div>
                 </div>
