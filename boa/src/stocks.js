@@ -223,7 +223,7 @@ class Stocks extends Component{
 
     toggleSimulate = () => {
         this.setState({
-            SimulatedTrend: 1,
+            SimulatedTrend: -this.state.SimulatedTrend,
         })
     }
 
@@ -275,7 +275,7 @@ class Stocks extends Component{
                                     <input class="form-control" type = "text" id = "nameInput" placeholder = "Enter your stock symbol" ></input>
                                 </div>
                             </div>
-                            <div class="container">
+                            <div>
                                 {Person}
                             </div>
                         </div>
@@ -298,7 +298,7 @@ class Stocks extends Component{
 
                 <div class="row">
                     <div class = "col-md-6 pt-4 border-top">
-                        <p class="h1">S&P 500 Historical Trend 2007-2009</p>
+                        <p class="h2">S&P 500 Historical Trend 2008-2009</p>
                         <HisTred></HisTred>
                     </div>
                     <div class="col-md-6 pt-4 border-left border-top">
@@ -309,7 +309,7 @@ class Stocks extends Component{
                                     <p>{table}</p>
                                 </li>
                             </ul> */}
-                            <button onClick = {this.toggleSimulate}>Simulated Historical Data</button>
+                            <button class="btn btn-success btn-lg btn-block mb-3" onClick = {this.toggleSimulate}>Simulated Historical Data</button>
                             {this.state.SimulatedTrend == 1 && <SimulatedTrend />}
                         </div>
                     </div>

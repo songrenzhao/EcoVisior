@@ -71,7 +71,7 @@ class SimulatedTrend extends React.Component{
                 predictArr.push(this.state.timeSeries1[key]["predicted"]);
             }
         });
-        dateArr.reverse(); originArr.reverse(); predictArr.reverse();
+        //dateArr.reverse(); originArr.reverse(); predictArr.reverse();
         // console.log(timeArr);
         this.setState({
             date: dateArr,
@@ -86,15 +86,13 @@ class SimulatedTrend extends React.Component{
 
     render(){
         return(
-            <div class="row">
-                <div>
-                    <HistComparson
-                        name = {this.state.name}
-                        dateArr = {this.state.date}
-                        predArr = {this.state.predicted}
-                        origArr = {this.state.original}
-                        />
-                </div>
+            <div>
+                <HistComparson
+                    name = {this.state.name}
+                    dateArr = {this.state.date}
+                    predArr = {this.state.predicted}
+                    origArr = {this.state.original}
+                />
             </div>
         )
     }
