@@ -101,8 +101,12 @@ class NToOne extends React.Component{
     render(){
         return(
             <div>
-                {this.state.input}
                 <MultaData date = {this.state.date} origin = {this.state.original} predict = {this.state.predicted}/>
+                <div class="col mb-3">
+                    <button type="button" class="btn btn btn-outline-info btn-block disabled">Percentage Difference: <span class="badge badge-pill badge-warning">{this.state.percentage_difference}</span></button>
+                    <button type="button" class="btn btn btn-outline-info btn-block disabled">Current Price: <span class="badge badge-pill badge-warning">{this.state.today}</span></button>
+                    <button type="button" class="btn btn btn-outline-info btn-block disabled">Predicted Price: <span class="badge badge-pill badge-warning">{this.state.tommorrow}</span></button>
+                </div>
             </div>
         )
     }

@@ -86,13 +86,15 @@ class SimulatedTrend extends React.Component{
 
     render(){
         return(
-            <div>
-                <HistComparson
-                      name = {this.state.name}
-                      dateArr = {this.state.date}
-                      predArr = {this.state.predicted}
-                      origArr = {this.state.original}
-                      />
+            <div class="row">
+                <div>
+                    <HistComparson
+                        name = {this.state.name}
+                        dateArr = {this.state.date}
+                        predArr = {this.state.predicted}
+                        origArr = {this.state.original}
+                        />
+                </div>
             </div>
         )
     }

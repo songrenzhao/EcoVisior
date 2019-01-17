@@ -92,6 +92,7 @@ class YieldCurve extends Component{
                            oneArr = {this.state.oneArr}
                            tenArr = {this.state.tenArr}
                     />
+                
             </div>
         )
     }
