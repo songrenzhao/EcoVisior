@@ -34,6 +34,7 @@ class Stocks extends Component{
             title: [],
             OneToOne: -1,
             nToOne: -1,
+            SimulatedTrend: -1,
         }
         this.getNews = this.getNews.bind(this)
     }
@@ -220,6 +221,12 @@ class Stocks extends Component{
         });
     }
 
+    toggleSimulate = () => {
+        this.setState({
+            SimulatedTrend: 1,
+        })
+    }
+
     render(){
         let Person;
         if(this.state.type === "High"){
@@ -301,8 +308,8 @@ class Stocks extends Component{
                                     <p>{table}</p>
                                 </li>
                             </ul> */}
-                            <p class="h1">Simulated Historical Data will be here...</p>
-                            <SimulatedTrend />
+                            <button onClick = {this.toggleSimulate}>Simulated Historical Data</button>
+                            {this.state.SimulatedTrend == 1 && <SimulatedTrend />}
                         </div>
                     </div>
                 </div>
